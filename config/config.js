@@ -8,5 +8,6 @@ config.mongodb.password=  process.env.MONGO_PASS || 'password';
 config.mongodb.uri = process.env.MONGODB_URI || config.mongodb.user_name + ':' +config.mongodb.password + '@localhost:27017/BubbleChat';
 config.web.port = process.env.WEB_PORT || 4000;
 config.web.cookieKey = process.env.COOKIEKEY;
+config.web.salt = process.env.SALT;
 
 module.exports = config;
