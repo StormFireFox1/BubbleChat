@@ -1,25 +1,39 @@
 var express = require('express');
 var config = require('../config/config')
 var client = require('mongodb').MongoClient
+var winston = require('winston');
 var router = express.Router();
+var bcrypt = require('bcrypt');
 
 var dbURL = config.mongodb.uri;
-var crypto = require('crypto');
-var cookieEncryptor = crypto.createCipher('aes-192-gcm', config.web.cookieKey);
-var cookieDecryptor = crypto.createDecipher('aes-192-gcm', config.web.cookieKey);
+var crypto = require('crypto'),
+    algorithm = 'aes-192-gcm',
+    password = config.web.cookieKey;
+
+function encryptCookie(cookie){
+  var cipher = crypto.createCipher(algorithm, password)
+  var crypted = cipher.update(cookie, 'utf-8', 'hex')
+  crypted += cipher.final('hex');
+  return crypted;
+}
+ 
+function decryptCookie(cookie){
+  var decipher = crypto.createDecipher(algorithm, password)
+  var dec = decipher.update(cookie, 'hex', 'utf-8')
+  return dec;
+}
 
 // Declare logging
-const indexLogger = require('winston').createLogger({
+const indexLogger = winston.createLogger({
   level: 'info',
-  format: winston.format.json(),
   transports: [
-    new winston.transports.File({ filename: '../log/indexErrors.log', level: 'error' }),
-    new winston.transports.File({ filename: '../log/indexRequests.log' })
+    new winston.transports.File({ filename: 'indexErrors.log', level: 'error' }),
+    new winston.transports.File({ filename: 'indexRequests.log', level: 'info' })
   ]
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
+  indexLogger.add(new winston.transports.Console({
     format: winston.format.simple()
   }));
 }
@@ -55,7 +69,6 @@ router.post('/authChallenge', function (req, res, next) {
 
       var username = req.body.username;
       var password = req.body.password;
-      password = crypto.pbkdf2(password, config.web.salt, 10000)
 
       indexLogger.log({
         level: 'info',
@@ -68,7 +81,7 @@ router.post('/authChallenge', function (req, res, next) {
 
       var accountsCollection = db.db("BubbleChat").collection("Accounts");
 
-      accountsCollection.find({"username": username, "password": password}).toArray(function (err, result) {
+      accountsCollection.findOne({"username": username}, function (err, result) {
         if (err) {
 
           indexLogger.log({
@@ -76,13 +89,12 @@ router.post('/authChallenge', function (req, res, next) {
             message: 'Cannot find account in collection! Error: ' + err,
           });
 
-        } else if (result.length) {
-          var encryptedCookie = cookieEncryptor.update(username, 'utf8', 'hex');
-          encryptedCookie += cookieEncryptor.final('hex');
-        
-          res.cookie(sessionID, encryptedCookie, {maxAge: Date.now() + 24 * 60 * 60 * 1000}); // 24 hours expiration time
-          res.redirect('account')
-        } else {
+        } else if (result  && bcrypt.compareSync(password, result.password)) {
+            var encryptedCookie = encryptCookie(username);
+          
+            res.cookie('sessionID', encryptedCookie, {maxAge: Date.now() + 24 * 60 * 60 * 1000}); // 24 hours expiration time
+            res.redirect('account')
+          } else {
           res.redirect('login');
         }
       });
@@ -105,7 +117,7 @@ router.post('/authNew', function (req, res, next) {
 
       var newAccount = {
         username: req.body.username,
-        password: crypto.pbkdf2(req.body.password, config.web.salt, 10000),
+        password: bcrypt.hashSync(req.body.password, 10),
         dateofbirth: req.body.dateofbirth,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -157,7 +169,7 @@ router.get('/account', function(req, res, next) {
       }
       
       var sessionID = req.cookies.sessionID;
-      var decipheredCookie = cookieDecryptor.update(sessionID,'hex','utf8') + cookieDecryptor.final('utf8');
+      var decipheredCookie = decryptCookie(sessionID)
 
       var accountsCollection = db.db("BubbleChat").collection("Accounts");
 
@@ -169,7 +181,7 @@ router.get('/account', function(req, res, next) {
             message: 'Cannot find account in collection! Error: ' + err,
           });
 
-        } else if (result.length) {
+        } else if (result) {
           var studentAccount = result;
           res.render('account', {
             username: result.username,
