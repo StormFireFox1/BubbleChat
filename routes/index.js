@@ -1,3 +1,4 @@
+/* Config stage, define all of the necessary libraries */
 var express = require('express');
 var config = require('../config/config')
 var client = require('mongodb').MongoClient
@@ -5,6 +6,7 @@ var winston = require('winston');
 var router = express.Router();
 var bcrypt = require('bcrypt');
 
+/* Setup all the variables for the database */
 var dbURL = config.mongodb.uri;
 var crypto = require('crypto'),
     algorithm = 'aes-192-gcm',
@@ -37,6 +39,8 @@ if (process.env.NODE_ENV !== 'production') {
     format: winston.format.simple()
   }));
 }
+
+
 
 /* GET home page. This returns the homepage */
 router.get('/', function(req, res, next) {
@@ -170,6 +174,14 @@ router.get('/account', function(req, res, next) {
       
       var sessionID = req.cookies.sessionID;
       var decipheredCookie = decryptCookie(sessionID)
+
+      indexLogger.log({
+        level: 'info',
+        sessionID: sessionID,
+        clientIP: req.ip,
+        userAgent: req.userAgent,
+        message: 'accountPage hit!'
+      });
 
       var accountsCollection = db.db("BubbleChat").collection("Accounts");
 
