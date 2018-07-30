@@ -3,7 +3,9 @@ html {
   height: 100%;
   margin: 0;
 }
-
+.homeactive{
+  background-color: #DCDCDC;  
+}
 .bg {
   /* The image used */
   background-image: url("/images/wallpaper.jpg");
