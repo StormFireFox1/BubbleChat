@@ -96,7 +96,8 @@ router.get('/', function (req, res, next) {
 
           res.render('clusterList', {
             title: 'Clusters',
-            clusterList: clusterList
+            clusterList: clusterList,
+            cookie: req.cookies.sessionID,
           });
         }
       });
@@ -108,7 +109,8 @@ router.get('/', function (req, res, next) {
 
 router.get('/new', function (req, res, next) {
   res.render('newCluster', {
-    title: 'New Cluster'
+    title: 'New Cluster',
+    cookie: res.cookies.sessionID
   });
 });
 
@@ -137,8 +139,8 @@ router.post('/addCluster', function (req, res, next) {
         members: [admin],
       };
 
-      var accountsCollection = db.db("BubbleChat").collection("Accounts");
-      accountsCollection.insert([newAccount], function (err, result) {
+      var clustersCollection = db.db("BubbleChat").collection("Clusters");
+      clustersCollection.insert([newCluster], function (err, result) {
         if (err) {
 
           clustersLogger.log({
@@ -147,7 +149,38 @@ router.post('/addCluster', function (req, res, next) {
           });
 
         } else {
-          res.redirect('clusterList');
+          res.redirect('/');
+        }
+      })
+    }
+  })
+});
+
+router.get('/:clusterName', function (req, res, next) {
+  client.connect(dbURL, function (err, db) {
+    if (err) {
+
+      clustersLogger.log({
+        level: 'error',
+        message: 'Cannot connect to database! Error: ' + err,
+      });
+
+    } else {
+
+      var sessionID = req.cookies.sessionID;
+      var decipheredCookie = decryptCookie(sessionID);
+
+      var clustersCollection = db.db("BubbleChat").collection("Clusters");
+      clustersCollection.findOne({name: req.params.clusterName}, function (err, result) {
+        if (err) {
+
+          clustersLogger.log({
+            level: 'error',
+            message: 'Cannot find cluster in database! Error: ' + err,
+          });
+          res.redirect('/')
+        } else {
+          res.render('clusterMain', {title: result.name, cluster: result, cookie: req.cookies.sessionID});
         }
       })
     }

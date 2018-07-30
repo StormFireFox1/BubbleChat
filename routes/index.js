@@ -50,25 +50,24 @@ if (process.env.NODE_ENV !== 'production') {
 
 /* GET home page. This returns the homepage */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'BubbleChat' });
+  res.render('index', { title: 'BubbleChat', cookie: req.cookies.sessionID });
 });
 
 router.get('/login', function (req, res, next) {
-  res.render('login', {title: "Login"});
+  res.render('login', {title: "Login", cookie: req.cookies.sessionID });
 });
+
 router.get('/findtags', function(req, res, next){
-  res.render('findtags',{title:"Findtags"})
+  res.render('findtags',{title:"Find Tags", cookie: req.cookies.sessionID })
 });
-router.get('/signup', function(req, res, next){
-  res.render('signup',{title:"Signup"});
-});
+
 router.get('/signup', function (req, res, next) {
   if(!req.cookies.sessionID)
   {
   	res.redirect('login', 303);
   }
 
-  res.render('signup', { title: 'Sign Up' });
+  res.render('signup', { title: 'Sign Up'});
 });
 
 router.post('/authChallenge', function (req, res, next) {
@@ -207,11 +206,13 @@ router.get('/account', function(req, res, next) {
         } else if (result) {
           var studentAccount = result;
           res.render('account', {
+            title: 'My Account',
             username: result.username,
             firstname: result.firstname,
             lastname: result.lastname,
             dateofbirth: result.dateofbirth,
-            tags: result.tags
+            tags: result.tags,
+            cookie: req.cookies.sessionID
           });
         } else {
           res.redirect('login');
