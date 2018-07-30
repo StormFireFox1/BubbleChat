@@ -62,9 +62,9 @@ router.get('/findtags', function(req, res, next){
 });
 
 router.get('/signup', function (req, res, next) {
-  if(!req.cookies.sessionID)
+  if(req.cookies.sessionID)
   {
-  	res.redirect('login', 303);
+  	res.redirect('/account', 303);
   }
 
   res.render('signup', { title: 'Sign Up'});
