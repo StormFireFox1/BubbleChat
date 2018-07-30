@@ -41,7 +41,7 @@ const clustersLogger = winston.createLogger({
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  indexLogger.add(new winston.transports.Console({
+  clustersLogger.add(new winston.transports.Console({
     format: winston.format.simple()
   }));
 }
@@ -53,7 +53,7 @@ router.get('/', function (req, res, next) {
   client.connect(dbURL, function (err, db) {
     if (err) {
 
-      indexLogger.log({
+      clustersLogger.log({
         level: 'error',
         message: 'Cannot connect to database! Error: ' + err,
       });
@@ -80,10 +80,10 @@ router.get('/', function (req, res, next) {
 
       accountsCollection.find({
         "members": username
-      }.toArray(function (err, result) {
+      }).toArray(function (err, result) {
         if (err) {
 
-          indexLogger.log({
+          clustersLogger.log({
             level: 'error',
             message: 'Cannot find account in collection! Error: ' + err,
           });
@@ -99,7 +99,7 @@ router.get('/', function (req, res, next) {
             clusterList: clusterList
           });
         }
-      }));
+      });
 
       db.close();
     }
@@ -116,7 +116,7 @@ router.post('/addCluster', function (req, res, next) {
   client.connect(dbURL, function (err, db) {
     if (err) {
 
-      indexLogger.log({
+      clustersLogger.log({
         level: 'error',
         message: 'Cannot connect to database! Error: ' + err,
       });
@@ -141,7 +141,7 @@ router.post('/addCluster', function (req, res, next) {
       accountsCollection.insert([newAccount], function (err, result) {
         if (err) {
 
-          indexLogger.log({
+          clustersLogger.log({
             level: 'error',
             message: 'Cannot add cluster in database! Error: ' + err,
           });
