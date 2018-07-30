@@ -30,11 +30,11 @@ const clustersLogger = winston.createLogger({
   level: 'info',
   transports: [
     new winston.transports.File({
-      filename: 'clustersErrors.log',
+      filename: 'logs/clustersErrors.log',
       level: 'error'
     }),
     new winston.transports.File({
-      filename: 'clustersRequests.log',
+      filename: 'logs/clustersRequests.log',
       level: 'info'
     })
   ]

@@ -29,8 +29,14 @@ function decryptCookie(cookie){
 const indexLogger = winston.createLogger({
   level: 'info',
   transports: [
-    new winston.transports.File({ filename: 'indexErrors.log', level: 'error' }),
-    new winston.transports.File({ filename: 'indexRequests.log', level: 'info' })
+    new winston.transports.File({
+      filename: 'logs/indexErrors.log',
+      level: 'error'
+    }),
+    new winston.transports.File({
+      filename: 'logs/indexRequests.log',
+      level: 'info'
+    })
   ]
 });
 
