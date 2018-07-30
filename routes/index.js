@@ -50,7 +50,12 @@ router.get('/', function(req, res, next) {
 router.get('/login', function (req, res, next) {
   res.render('login', {title: "Login"});
 });
-
+router.get('/findtags', function(req, res, next){
+  res.render('findtags',{title:"Findtags"})
+});
+router.get('/signup', function(req, res, next){
+  res.render('signup',{title:"Signup"});
+});
 router.get('/signup', function (req, res, next) {
   if(!req.cookies.sessionID)
   {

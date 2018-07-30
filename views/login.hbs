@@ -1,0 +1,39 @@
+<link rel='stylesheet' href='/stylesheets/loginstyle.css' />
+<style>
+    .loginactive {
+
+        background-color: #DCDCDC;
+    }
+
+    }
+</style>
+<script>
+    function validateForm() {
+
+        //first name
+        var x = document.forms["Myform"]["username"].value;
+        if (x == "") {
+            alert("The username must be filled out");
+            return false;
+
+        }
+</script>
+
+<div class="wrap">
+    <p style="font-size: 48px; text-align: center;">Log in</p>
+    <br>
+    <br>
+    <div class="avatar">
+        <img src="/images/image.png">
+    </div>
+    <form name="Myform" onsubmit="return validateForm()" method="post"></form>
+    <input type="text" name="username" placeholder="username">
+    <div class="bar">
+        <i></i>
+    </div>
+    <input type="password" name="password" placeholder="password">
+    <a href="" class="forgot_link">forgot ?</a>
+    </form>
+    <button type="submit" form="Myform">Sign in</button>
+
+</div>
