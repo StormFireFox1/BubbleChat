@@ -54,6 +54,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login', function (req, res, next) {
+  if(req.cookies.sessionID)
+  {
+  	res.redirect('/account', 303);
+  }
+
   res.render('login', {title: "Login", cookie: req.cookies.sessionID });
 });
 
@@ -156,7 +161,7 @@ router.post('/authNew', function (req, res, next) {
           });
 
         } else {
-          res.redirect('login');
+          res.redirect('/login');
         }
       });
 

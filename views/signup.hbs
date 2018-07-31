@@ -6,37 +6,36 @@
 </style>
 <div class="wrap">
     <p style="font-size: 48px; text-align: center; margin-top:-82px;">Sign up</p>
-<form action="/authNew">
+<form action="/authNew" method="POST">
 
     <div class="avatar">
         <img src="/images/image.png">
     </div>
 
-    <input type="text" placeholder="username" required>
+    <input type="text" name="username" placeholder="username" required>
     <div class="bar">
         <i></i>
     </div>
-    <input type="password" placeholder="password" required>
+    <input type="password" name="password" placeholder="password" required>
     <div class="bar">
         <i></i>
     </div>
-    <input type="justtext" placeholder="First name" required>
+    <input type="justtext" name="firstname" placeholder="First name" required>
     <div class="bar">
         <i></i>
     </div>
-    <input type="justtext" placeholder="Last name" required>
+    <input type="justtext" name="lastname" placeholder="Last name" required>
     <div class="bar">
         <i></i>
     </div>
-    <input type="justtext" placeholder="Birthday" required>
+    <input type="date" name="dateofbirth" max="2017-07-31" placeholder="Birthday" required>
     <div class="bar">
         <i></i>
     </div>
-    <input type="email" placeholder="E-mail" required>
+    <input type="email" name="email" placeholder="E-mail" required>
 
     <br>
 
-
-    <button>Sign up</button>
+    <button type="submit">Sign up</button>
     </form>
 </div>
