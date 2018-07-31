@@ -58,6 +58,10 @@ router.get('/login', function (req, res, next) {
 });
 
 router.get('/findtags', function(req, res, next){
+  if(!req.cookies.sessionID) {
+    res.redirect('/login', 303);
+  }
+
   res.render('findtags',{title:"Find Tags", cookie: req.cookies.sessionID })
 });
 
