@@ -230,4 +230,10 @@ router.get('/account', function(req, res, next) {
   })
 });
 
+router.get('/authLogOut', function (req, res, next) {
+  res.clearCookie('sessionID');
+
+  res.redirect('/');
+});
+
 module.exports = router;
