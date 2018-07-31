@@ -11,15 +11,14 @@
 
 
   <link rel='stylesheet' href='/public/stylesheets/mainpagestyle.css' />
-
+  <script src="/javascripts/cookie.js"></script>
   <title>{{title}}</title>
-  
+
 
 </head>
 
 <body>
-  {{> navbar}}
-  {{{body}}}
+  {{#if cookie}} {{>navbar_account}} {{else}} {{>navbar}} {{/if}} {{{body}}}
 </body>
 
 </html>
