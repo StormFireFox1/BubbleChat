@@ -9,17 +9,17 @@ var bcrypt = require('bcrypt');
 /* Setup all the variables for the database */
 var dbURL = config.mongodb.uri;
 var crypto = require('crypto'),
-    algorithm = 'aes-192-gcm',
-    password = config.web.cookieKey;
+  algorithm = 'aes-192-gcm',
+  password = config.web.cookieKey;
 
-function encryptCookie(cookie){
+function encryptCookie(cookie) {
   var cipher = crypto.createCipher(algorithm, password)
   var crypted = cipher.update(cookie, 'utf-8', 'hex')
   crypted += cipher.final('hex');
   return crypted;
 }
- 
-function decryptCookie(cookie){
+
+function decryptCookie(cookie) {
   var decipher = crypto.createDecipher(algorithm, password)
   var dec = decipher.update(cookie, 'hex', 'utf-8')
   return dec;
@@ -49,38 +49,47 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 /* GET home page. This returns the homepage */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'BubbleChat', cookie: req.cookies.sessionID });
+router.get('/', function (req, res, next) {
+  res.render('index', {
+    title: 'BubbleChat',
+    cookie: req.cookies.sessionID
+  });
 });
 
 router.get('/login', function (req, res, next) {
-  if(req.cookies.sessionID)
-  {
-  	res.redirect('/account', 303);
+  if (req.cookies.sessionID) {
+    res.redirect('/account', 303);
   }
 
-  res.render('login', {title: "Login", cookie: req.cookies.sessionID });
+  res.render('login', {
+    title: "Login",
+    cookie: req.cookies.sessionID
+  });
 });
 
-router.get('/findtags', function(req, res, next){
-  if(!req.cookies.sessionID) {
+router.get('/findtags', function (req, res, next) {
+  if (!req.cookies.sessionID) {
     res.redirect('/login', 303);
   }
 
-  res.render('findtags',{title:"Find Tags", cookie: req.cookies.sessionID })
+  res.render('findtags', {
+    title: "Find Tags",
+    cookie: req.cookies.sessionID
+  })
 });
 
 router.get('/signup', function (req, res, next) {
-  if(req.cookies.sessionID)
-  {
-  	res.redirect('/account', 303);
+  if (req.cookies.sessionID) {
+    res.redirect('/account', 303);
   }
 
-  res.render('signup', { title: 'Sign Up'});
+  res.render('signup', {
+    title: 'Sign Up'
+  });
 });
 
 router.post('/authChallenge', function (req, res, next) {
-  client.connect(dbURL, function(err, db) {
+  client.connect(dbURL, function (err, db) {
     if (err) {
 
       indexLogger.log({
@@ -104,7 +113,9 @@ router.post('/authChallenge', function (req, res, next) {
 
       var accountsCollection = db.db("BubbleChat").collection("Accounts");
 
-      accountsCollection.findOne({"username": username}, function (err, result) {
+      accountsCollection.findOne({
+        "username": username
+      }, function (err, result) {
         if (err) {
 
           indexLogger.log({
@@ -112,12 +123,14 @@ router.post('/authChallenge', function (req, res, next) {
             message: 'Cannot find account in collection! Error: ' + err,
           });
 
-        } else if (result  && bcrypt.compareSync(password, result.password)) {
-            var encryptedCookie = encryptCookie(username);
-          
-            res.cookie('sessionID', encryptedCookie, {maxAge: Date.now() + 24 * 60 * 60 * 1000}); // 24 hours expiration time
-            res.redirect('account')
-          } else {
+        } else if (result && bcrypt.compareSync(password, result.password)) {
+          var encryptedCookie = encryptCookie(username);
+
+          res.cookie('sessionID', encryptedCookie, {
+            maxAge: Date.now() + 24 * 60 * 60 * 1000
+          }); // 24 hours expiration time
+          res.redirect('account')
+        } else {
           res.redirect('login');
         }
       });
@@ -128,7 +141,7 @@ router.post('/authChallenge', function (req, res, next) {
 });
 
 router.post('/authNew', function (req, res, next) {
-  client.connect(dbURL, function(err, db) {
+  client.connect(dbURL, function (err, db) {
     if (err) {
 
       indexLogger.log({
@@ -146,7 +159,7 @@ router.post('/authNew', function (req, res, next) {
         lastname: req.body.lastname,
         tags: []
       };
-      
+
       indexLogger.log({
         level: 'info',
         account: newAccount,
@@ -175,8 +188,8 @@ router.post('/authNew', function (req, res, next) {
   })
 });
 
-router.get('/account', function(req, res, next) {
-  client.connect(dbURL, function(err, db) {
+router.get('/account', function (req, res, next) {
+  client.connect(dbURL, function (err, db) {
     if (err) {
 
       indexLogger.log({
@@ -186,11 +199,10 @@ router.get('/account', function(req, res, next) {
 
     } else {
 
-      if(!req.cookies.sessionID)
-      {
-     	  res.redirect('login', 303);
+      if (!req.cookies.sessionID) {
+        res.redirect('login', 303);
       }
-      
+
       var sessionID = req.cookies.sessionID;
       var decipheredCookie = decryptCookie(sessionID)
 
@@ -204,7 +216,9 @@ router.get('/account', function(req, res, next) {
 
       var accountsCollection = db.db("BubbleChat").collection("Accounts");
 
-      accountsCollection.findOne({"username": decipheredCookie}, function (err, result) {
+      accountsCollection.findOne({
+        "username": decipheredCookie
+      }, function (err, result) {
         if (err) {
 
           indexLogger.log({
@@ -225,6 +239,57 @@ router.get('/account', function(req, res, next) {
           });
         } else {
           res.redirect('login');
+        }
+      });
+
+      db.close();
+
+    }
+  })
+});
+
+router.post("/updateTags", function (req, res, next) {
+  client.connect(dbURL, function (err, db) {
+    if (err) {
+
+      indexLogger.log({
+        level: 'error',
+        message: 'Cannot connect to database! Error: ' + err,
+      });
+
+    } else {
+
+      if (!req.cookies.sessionID) {
+        res.redirect('login', 303);
+      }
+
+      var sessionID = req.cookies.sessionID;
+      var decipheredCookie = decryptCookie(sessionID)
+
+      indexLogger.log({
+        level: 'info',
+        sessionID: sessionID,
+        clientIP: req.ip,
+        userAgent: req.userAgent,
+        message: 'updateTags hit!'
+      });
+
+      var accountsCollection = db.db("BubbleChat").collection("Accounts");
+
+      accountsCollection.updateOne({
+        "username": decipheredCookie
+      }, {
+        "tags": req.body.tags
+      }, function (err, result) {
+        if (err) {
+
+          indexLogger.log({
+            level: 'error',
+            message: 'Cannot find account in collection! Error: ' + err,
+          });
+
+        } else {
+          res.redirect('/account');
         }
       });
 

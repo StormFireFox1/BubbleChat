@@ -107,10 +107,17 @@ router.get('/', function (req, res, next) {
   })
 });
 
+router.get('/find', function (req, res, next) {
+  res.render('findCluster', {
+    title: 'Find Clusters',
+    cookie: req.cookies.sessionID,
+  });
+});
+
 router.get('/new', function (req, res, next) {
   res.render('newCluster', {
     title: 'New Cluster',
-    cookie: res.cookies.sessionID
+    cookie: req.cookies.sessionID
   });
 });
 
@@ -171,7 +178,9 @@ router.get('/:clusterName', function (req, res, next) {
       var decipheredCookie = decryptCookie(sessionID);
 
       var clustersCollection = db.db("BubbleChat").collection("Clusters");
-      clustersCollection.findOne({name: req.params.clusterName}, function (err, result) {
+      clustersCollection.findOne({
+        name: req.params.clusterName
+      }, function (err, result) {
         if (err) {
 
           clustersLogger.log({
@@ -180,7 +189,11 @@ router.get('/:clusterName', function (req, res, next) {
           });
           res.redirect('/')
         } else {
-          res.render('clusterMain', {title: result.name, cluster: result, cookie: req.cookies.sessionID});
+          res.render('clusterMain', {
+            title: result.name,
+            cluster: result,
+            cookie: req.cookies.sessionID
+          });
         }
       })
     }
