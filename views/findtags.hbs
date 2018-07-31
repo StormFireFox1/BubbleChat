@@ -14,6 +14,7 @@
 <script>
         var x = 0;
         var array = Array();
+        const toUrlEncoded = obj => Object.keys(obj).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(obj[k])).join('&');
 
         function setColor(btn, icon, color) {
                 var property = document.getElementById(btn);
@@ -27,8 +28,10 @@
         }
 
         function add_element_to_array(id) {
-                array[x] = document.getElementById(id).id;
-                x++;
+                if (array.indexOf(id) == -1) {
+                        array[x] = document.getElementById(id).id;
+                        x++;
+                }
         }
 
         function display_array() {
@@ -39,6 +42,12 @@
                 }
                 document.getElementById("Result").innerHTML = e;
         }
+
+        
+
+        function submitTags() {
+
+        }
 </script>
 
 <div id="columns">
@@ -48,9 +57,9 @@
 
 
                 <div class="container">
-                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="icon" onclick="setColor('basketball','icon' ,'#101010');add_element_to_array('basketball')"></i>
-                        <input type="button" id="basketball" class="btn btn-info" value="Add tag" onclick="setColor('basketball','icon' ,'#101010');add_element_to_array('basketball')">
-                        
+                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="icon" onclick="setColor('Basketball','icon' ,'#101010');add_element_to_array('Basketball');"></i>
+                        <input type="button" id="Basketball" class="btn btn-info" value="Add tag" onclick="setColor('Basketball','icon' ,'#101010');add_element_to_array('Basketball');">
+
 
                 </div>
 
@@ -62,8 +71,8 @@
                 <h1>Computer Science</h1>
 
                 <div class="container">
-                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="computerscienceicon" onclick="setColor('computerscience','computerscienceicon' ,'#101010');;add_element_to_array('computerscience')"></i>
-                        <input type="button" id="computerscience" class="btn btn-info" value="Add tag" onclick="setColor('computerscience','computerscienceicon' ,'#101010');add_element_to_array('computerscience')">
+                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="computerscienceicon" onclick="setColor('Computer Science','computerscienceicon' ,'#101010');;add_element_to_array('Computer Science')"></i>
+                        <input type="button" id="Computer Science" class="btn btn-info" value="Add tag" onclick="setColor('Computer Science','computerscienceicon' ,'#101010');add_element_to_array('Computer Science')">
 
                 </div>
 
@@ -73,8 +82,8 @@
                 <img src="/images/muisc.jpg">
                 <h1>Music</h1>
                 <div class="container">
-                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="musicicon" onclick="setColor('music','musicicon' ,'#101010');add_element_to_array('music')"></i>
-                        <input type="button" id="music" class="btn btn-info" value="Add tag" onclick="setColor('music','musicicon' ,'#101010');add_element_to_array('music')">
+                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="musicicon" onclick="setColor('Music','musicicon' ,'#101010');add_element_to_array('Music')"></i>
+                        <input type="button" id="Music" class="btn btn-info" value="Add tag" onclick="setColor('Music','musicicon' ,'#101010');add_element_to_array('Music')">
                 </div>
         </figure>
 
@@ -84,8 +93,8 @@
                 <img src="/images/movies.jpg">
                 <h1>Movies</h1>
                 <div class="container">
-                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="moviesicon" onclick="setColor('movies','moviesicon' ,'#101010');add_element_to_array('movies')"></i>
-                        <input type="button" id="movies" class="btn btn-info" value="Add tag" onclick="setColor('movies','moviesicon' ,'#101010');add_element_to_array('movies')">
+                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="moviesicon" onclick="setColor('Movies','moviesicon' ,'#101010');add_element_to_array('Movies')"></i>
+                        <input type="button" id="Movies" class="btn btn-info" value="Add tag" onclick="setColor('Movies','moviesicon' ,'#101010');add_element_to_array('Movies')">
                 </div>
         </figure>
 
@@ -93,8 +102,8 @@
                 <img src="/images/cooking.jpg">
                 <h1>Cooking</h1>
                 <div class="container">
-                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="cookinicon" onclick="setColor('cooking','cookinicon' ,'#101010');add_element_to_array('cooking')"></i>
-                        <input type="button" id="cooking" class="btn btn-info" value="Add tag" onclick="setColor('cooking','cookinicon' ,'#101010');add_element_to_array('cooking')">
+                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="cookinicon" onclick="setColor('Cooking','cookinicon' ,'#101010');add_element_to_array('Cooking')"></i>
+                        <input type="button" id="Cooking" class="btn btn-info" value="Add tag" onclick="setColor('Cooking','cookinicon' ,'#101010');add_element_to_array('Cooking')">
                 </div>
         </figure>
 
@@ -102,8 +111,8 @@
                 <img src="/images/photography.jpeg">
                 <h1>Photography</h1>
                 <div class="container">
-                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="photographyicon" onclick="setColor('photography','photographyicon' ,'#101010');add_element_to_array('photography')"></i>
-                        <input type="button" id="photography" class="btn btn-info" value="Add tag" onclick="setColor('photography','photographyicon' ,'#101010');add_element_to_array('photography')">
+                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="photographyicon" onclick="setColor('Photography','photographyicon' ,'#101010');add_element_to_array('Photography')"></i>
+                        <input type="button" id="Photography" class="btn btn-info" value="Add tag" onclick="setColor('Photography','photographyicon' ,'#101010');add_element_to_array('Photography')">
                 </div>
         </figure>
 
@@ -112,10 +121,11 @@
                 <img src="/images/drawing.jpg">
                 <h1>Drawing</h1>
                 <div class="container">
-                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="drawingicon" onclick="setColor('drawing','drawingicon' ,'#101010');add_element_to_array('drawing')"></i>
-                        <input type="button" id="drawing" class="btn btn-info" value="Add tag" onclick="setColor('drawing','drawingicon' ,'#101010');add_element_to_array('drawing')">
+                        <i class="glyphicon glyphicon-plus btn btn-info" style="margin-bottom:2px;" id="drawingicon" onclick="setColor('Drawing','drawingicon' ,'#101010');add_element_to_array('Drawing')"></i>
+                        <input type="button" id="Drawing" class="btn btn-info" value="Add tag" onclick="setColor('Drawing','drawingicon' ,'#101010');add_element_to_array('Drawing')">
                 </div>
         </figure>
 </div>
- <input type="button" id="button2" value="Display" onclick="display_array();"></input>
-                        <div id="Result"></div> 
+<input type="button" value="Update Tags" onclick="submitTags();"></input>
+<input type="button" id="button2" value="Display" onclick="display_array();"></input>
+<div id="Result"></div>
