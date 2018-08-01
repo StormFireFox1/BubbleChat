@@ -23,7 +23,7 @@ body {
 
 #card {
     width: 400px;
-    height: 500px;
+    height: 600px;
     position: relative;
     margin: 10% auto;
     border-radius: 8px;
@@ -35,7 +35,7 @@ body {
     background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
     background-size: cover;
     width: 430px;
-    height: 330px;
+    height: 310px;
     position: relative;
     top: -15px;
     left: -15px;
@@ -48,7 +48,7 @@ body {
 #color {
     background: rgba(255, 255, 255, .60);
     width: 430px;
-    height: 530px;
+    height: 630px;
 }
 
 #profile {
@@ -102,3 +102,44 @@ p {
     position: relative;
     top: 56px;
 }
+
+
+button{
+    background:#1AAB8A;
+    color:#fff;
+    border:none;
+    position:relative;
+    height:60px;
+    font-size:1.0em;
+    padding:0 2em;
+    cursor:pointer;
+    transition:800ms ease all;
+    outline:none;
+
+
+   
+  }
+  button:hover{
+    background:#fff;
+    color:#1AAB8A;
+  }
+  button:before,button:after{
+    content:'';
+    position:absolute;
+    top:0;
+    right:0;
+    height:2px;
+    width:0;
+    background: #1AAB8A;
+    transition:400ms ease all;
+  }
+  button:after{
+    right:inherit;
+    top:inherit;
+    left:0;
+    bottom:0;
+  }
+  button:hover:before,button:hover:after{
+    width:100%;
+    transition:800ms ease all;
+  }
