@@ -178,7 +178,7 @@ router.post('/authNew', function (req, res, next) {
           });
 
         } else {
-          res.redirect('/login');
+          res.redirect('/findtags');
         }
       });
 
@@ -265,6 +265,10 @@ router.post("/updateTags", function (req, res, next) {
 
       var sessionID = req.cookies.sessionID;
       var decipheredCookie = decryptCookie(sessionID)
+      
+      var tagsString = req.body.tagArray;
+      var tags = tagsString.split('--');
+      tags.pop();
 
       indexLogger.log({
         level: 'info',
@@ -279,7 +283,9 @@ router.post("/updateTags", function (req, res, next) {
       accountsCollection.updateOne({
         "username": decipheredCookie
       }, {
-        "tags": req.body.tags
+        $set: {
+          "tags": tags
+        }
       }, function (err, result) {
         if (err) {
 
@@ -289,7 +295,7 @@ router.post("/updateTags", function (req, res, next) {
           });
 
         } else {
-          res.redirect('/account');
+          res.send('Successful!');
         }
       });
 

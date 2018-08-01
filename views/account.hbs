@@ -7,17 +7,15 @@
 	<div id="profile">
 		<img id="picture" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/225748/profile.jpg" alt="User" />
 		<h1>{{firstname}} {{lastname}}</h1>
-        <h2>{{dateofbirth}}</h2>
-        <h2>Username: {{username}}</h2>
-        <h2>Tags:</h2>
-        {{#each tags}}
-            <p>{{this}}</p>
-        {{/each}}
+		<h2>{{dateofbirth}}</h2>
+		<h2>Username: {{username}}</h2>
+		<h2>Tags:</h2>
+		<p>{{#each tags}} {{this}}
+			<br> {{/each}}
+		</p>
 		<div class="info">
-			
-		
+
+
 		</div>
 	</div>
 </div>
-
-
