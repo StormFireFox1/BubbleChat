@@ -157,6 +157,7 @@ router.get('/:bubbleName', function (req, res, next) {
                     } else if (result) {
                         res.render('bubble', {
                             title: req.params.bubbleName + " - BubbleChat",
+                            cookie: req.cookies.sessionID,
                             bubble: result
                         })
                     } else {
@@ -168,6 +169,14 @@ router.get('/:bubbleName', function (req, res, next) {
     }
 });
 
-
+router.get('/new', function (req, res, next) {
+    if (!req.cookies.sessionID) {
+        res.redirect('/login', 303);
+    }
+    res.render('newBubble', {
+        title: 'New Bubble',
+        cookie: req.cookies.sessionID
+    });
+});
 
 module.exports = router;

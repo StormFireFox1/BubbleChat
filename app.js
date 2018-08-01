@@ -12,15 +12,23 @@ var clusterRouter = require('./routes/clusters');
 var bubbleRouter = require('./routes/bubbles');
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 hbs.registerPartials(__dirname + "/views/partials")
 app.set('view engine', 'hbs');
 
-app.use(logger('combined', {stream: fs.createWriteStream('logs/HTTPRequests.log', {flags: 'a'})}));
+app.use(logger('combined', {
+  stream: fs.createWriteStream('logs/HTTPRequests.log', {
+    flags: 'a'
+  })
+}));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -29,13 +37,18 @@ app.use('/users', usersRouter);
 app.use('/clusters', clusterRouter);
 app.use('/bubbles', bubbleRouter);
 
+app.use(function(req, res, next){
+  res.io = io;
+  next();
+});
+
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -45,4 +58,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = {
+  app: app,
+  server: server
+};
