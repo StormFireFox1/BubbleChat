@@ -13,3 +13,10 @@
     width: auto;
     padding: 7px 14px;
 }
+.container{
+    width: 100%;
+    height: auto;
+    margin: auto;
+    margin-top: 3%;
+    margin-left:25%;
+}

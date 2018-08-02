@@ -101,6 +101,8 @@ router.get('/signup', function (req, res, next) {
   });
 });
 
+
+
 router.post('/authChallenge', function (req, res, next) {
   client.connect(dbURL, function (err, db) {
     if (err) {
