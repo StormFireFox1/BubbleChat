@@ -1,25 +1,27 @@
 <link rel='stylesheet' href='/stylesheets/mainpagestyle.css' />
 
-<div class="bg">
-    <div style="font-size:1.5em">
-        <br>
-        <br>
-        <br>
-        <h1>
-            <p style="display:block;text-align:center;font-size: 99px;">
-                <kbd>BubbleChat</kbd>
-            </p>
-            <p style="display:block;text-align:center">Omegle v2.0</p>
-        </h1>
+<script>// JS for content editable trick from Chris Coyier
 
-        <a href="/signup" class="button5" style="background-color:#42cc8c; margin-left:40%;margin-right:40%;display:block;margin-top:6%;margin-bottom:0%">Get started!</a>
+var h1 = document.querySelector("h1");
+
+h1.addEventListener("input", function() {
+  this.setAttribute("data-heading", this.innerText);
+});</script>
+<h1 data-heading="Bubble Chat">Bubble Chat</h1>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+   
+
+        <a href="/signup" class="button5" style="background-color:#42cc8c; margin-left:35%;margin-right:35%;display:block;margin-top:23%;margin-bottom:0%">Get started!</a>
         <!--
 		<a href="something" class="button5" style="border-color:#FFFFFF; background-color:rgba(0,0,0,0); color:#FFFFFF"></a> 
 -->
-    </div>
-    <br>
-    <br>
-    <br>
+    
     
     <div class="wrap">
 
@@ -31,4 +33,3 @@
         </div>
 
     </div>
-</div>
