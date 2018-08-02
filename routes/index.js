@@ -66,6 +66,11 @@ router.get('/login', function (req, res, next) {
     cookie: req.cookies.sessionID
   });
 });
+router.get('/loadingscreen', function(req, res, next){
+  res.render('loadingscreen',{
+    title: "Loading"
+  });
+});
 router.get('/bubble',function(req, res, next){
   if(!req.cookies.sessionID){
     res.redirect('/login', 303);
