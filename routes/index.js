@@ -66,7 +66,15 @@ router.get('/login', function (req, res, next) {
     cookie: req.cookies.sessionID
   });
 });
-
+router.get('/bubble',function(req, res, next){
+  if(!req.cookies.sessionID){
+    res.redirect('/login', 303);
+  }
+  res.render('bubble',{
+    title:"Bubble",
+    cookie: req.cookies.sessionID
+  });
+});
 router.get('/findtags', function (req, res, next) {
   if (!req.cookies.sessionID) {
     res.redirect('/login', 303);
