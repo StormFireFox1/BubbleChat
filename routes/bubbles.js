@@ -5,6 +5,7 @@ var client = require('mongodb').MongoClient
 var winston = require('winston');
 var router = express.Router();
 var bcrypt = require('bcrypt');
+var randomwords = require('random-words');
 
 /* Setup all the variables for the database */
 var dbURL = config.mongodb.uri;
@@ -57,6 +58,15 @@ if (process.env.NODE_ENV !== 'production') {
     bubblesLogger.add(new winston.transports.Console({
         format: winston.format.simple()
     }));
+}
+
+function randomBubbleName() {
+    var arrayOfWords = randomwords(3);
+    var name = "";
+    for (var i = 0; i < arrayOfWords.length; i++) {
+        name += arrayOfWords[i];
+    }
+    return name;
 }
 
 function matchMakeBubble(username) {
@@ -177,6 +187,13 @@ router.get('/new', function (req, res, next) {
         title: 'New Bubble',
         cookie: req.cookies.sessionID
     });
+});
+
+router.get('/queue', function (req, res, next) {
+    if(!req.cookies.sessionID) {
+        res.redirect('/login', 303);
+    }
+    res.render('loadingScreen', {title: 'Bubble Queue', cookie: req.cookies.sessionID});
 });
 
 module.exports = router;
