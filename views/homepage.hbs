@@ -1,0 +1,10 @@
+<link rel='stylesheet' href='/stylesheets/homepage.css' />
+<script>// JS for content editable trick from Chris Coyier
+
+var h1 = document.querySelector("h1");
+
+h1.addEventListener("input", function() {
+  this.setAttribute("data-heading", this.innerText);
+});</script>
+<h1 data-heading="Bubble Chat">Bubble Chat</h1>
+        <a href="/bubble" class="button5" style="background-color:#42cc8c; margin-left:33%;margin-right:33%;display:block;margin-top:6%;margin-bottom:0%">Bubble me up!</a>
