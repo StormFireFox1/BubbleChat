@@ -135,7 +135,7 @@ router.post('/authChallenge', function (req, res, next) {
           var encryptedCookie = encryptCookie(username);
 
           res.cookie('sessionID', encryptedCookie, {
-            maxAge: Date.now() + 24 * 60 * 60 * 1000
+            maxAge: Date.now() + 24 * 60 * 60
           }); // 24 hours expiration time
           res.redirect('account')
         } else {
@@ -186,6 +186,11 @@ router.post('/authNew', function (req, res, next) {
           });
 
         } else {
+          var encryptedCookie = encryptCookie(newAccount.username);
+
+          res.cookie('sessionID', encryptedCookie, {
+            maxAge: Date.now() + 24 * 60 * 60
+          }); // 24 hours expiration time
           res.redirect('/findtags');
         }
       });
