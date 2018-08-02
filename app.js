@@ -37,11 +37,6 @@ app.use('/users', usersRouter);
 app.use('/clusters', clusterRouter);
 app.use('/bubbles', bubbleRouter);
 
-app.use(function(req, res, next){
-  res.io = io;
-  next();
-});
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -56,6 +51,22 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+io.sockets.on('connection', function (socket) {
+  socket.on('sendhandle', function (handle) {
+    socket.handle = handle;
+  });
+
+  socket.on('attachtobubble', function (bubbleName) {
+    socket.join(bubbleName);
+  });
+
+  socket.on('sendmessage', function (data) {
+    socket.emit('updatechat', data);
+    socket.in(data.room).emit('updatechat', data);
+  });
+
 });
 
 module.exports = {
