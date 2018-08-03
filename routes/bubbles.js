@@ -5,7 +5,7 @@ var client = require('mongodb').MongoClient
 var winston = require('winston');
 var router = express.Router();
 var bcrypt = require('bcrypt');
-var randomwords = require('random-words');
+var randomURLGenerator = require('gfycat-style-urls'); 
 
 /* Setup all the variables for the database */
 var dbURL = config.mongodb.uri;
@@ -61,72 +61,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 function randomBubbleName() {
-    var arrayOfWords = randomwords(3);
-    var name = "";
-    for (var i = 0; i < arrayOfWords.length; i++) {
-        name += arrayOfWords[i];
-    }
-    return name;
-}
-
-function matchMakeBubble(username) {
-    client.connect(dbURL, function (err, db) {
-        if (err) {
-
-            bubblesLogger.log({
-                level: 'error',
-                message: 'Cannot connect to database! Error: ' + err,
-            });
-
-        } else {
-
-            bubblesLogger.log({
-                level: 'info',
-                username: username,
-                clientIP: req.ip,
-                userAgent: req.userAgent,
-                message: 'MatchMakeBubble hit!'
-            });
-
-            var accountsCollection = db.db("BubbleChat").collection("Accounts");
-
-            accountsCollection.findOne({
-                "username": username
-            }, function (err, result) {
-                if (err) {
-
-                    bubblesLogger.log({
-                        level: 'error',
-                        message: 'Cannot find account in collection! Error: ' + err,
-                    });
-
-                } else if (result) {
-                    var query = {
-                        "tags": {
-                            $in: result.tags
-                        }
-                    };
-
-                    accountsCollection.find(query, {
-                        "username": 1,
-                        _id: 0
-                    }).toArray(function (err, result) {
-                        if (err) {
-                            bubblesLogger.log({
-                                level: 'error',
-                                message: 'Cannot find accounts with tags in collection! Error:' + err,
-                            })
-                        } else if (result.length) {
-                            return result;
-                        } else {
-                            return [-1];
-                        }
-                    });
-                }
-                db.close();
-            });
-        }
-    });
+    return randomURLGenerator.generateCombination(2, "", true);
 }
 
 router.get('/:bubbleName', function (req, res, next) {
@@ -157,7 +92,7 @@ router.get('/:bubbleName', function (req, res, next) {
                 var bubblesCollection = db.db('BubbleChat').collection('Bubbles');
                 bubblesCollection.findOne({
                     "name": req.params.bubbleName,
-                    "members": decipheredCookie,
+                    "members.username": decipheredCookie,
                 }, function (err, result) {
                     if (err) {
                         bubblesLogger.log({
@@ -165,13 +100,32 @@ router.get('/:bubbleName', function (req, res, next) {
                             message: 'Cannot read bubble from database! Error: ' + err,
                         });
                     } else if (result) {
-                        res.render('bubble', {
-                            title: req.params.bubbleName + " - BubbleChat",
-                            cookie: req.cookies.sessionID,
-                            bubble: result
-                        })
+                        var bubbleName = result.name;
+                        var accountsCollection = db.db('BubbleChat').collection('Accounts');
+                        accountsCollection.findOne({
+                            "username": decipheredCookie
+                        }, function (err, result) {
+                            if (err) {
+            
+                                bubblesLogger.log({
+                                    level: 'error',
+                                    message: 'Cannot find account in collection! Error: ' + err,
+                                });
+            
+                            } else if (result) {
+
+                                res.render('bubble', {
+                                    title: req.params.bubbleName + " - BubbleChat",
+                                    cookie: req.cookies.sessionID,
+                                    bubbleName: req.params.bubbleName,
+                                    handle: result.handle
+                                })
+                            }});
+
+                            db.close();
                     } else {
                         res.redirect(401, '/');
+                        db.close();
                     }
                 });
             }
@@ -193,7 +147,85 @@ router.get('/queue', function (req, res, next) {
     if(!req.cookies.sessionID) {
         res.redirect('/login', 303);
     }
-    res.render('loadingScreen', {title: 'Bubble Queue', cookie: req.cookies.sessionID});
+    res.render('loadingscreen', {title: 'Bubble Queue', cookie: req.cookies.sessionID});
+});
+
+router.post('/initBubble', function (req, res, next) {
+    client.connect(dbURL, function (err, db) {
+        if (err) {
+            bubblesLogger.log({
+                level: 'error',
+                message: 'Cannot connect to database! Error: ' + err,
+            });
+        } else {
+            var bubblesCollection = db.db('BubbleChat').collection('Bubbles');
+            var username = decryptCookie(req.cookies.sessionID);
+
+            var accountsCollection = db.db("BubbleChat").collection("Accounts");
+            var membersList = [];
+
+            accountsCollection.findOne({
+                "username": username
+            }, function (err, result) {
+                if (err) {
+
+                    bubblesLogger.log({
+                        level: 'error',
+                        message: 'Cannot find account in collection! Error: ' + err,
+                    });
+
+                } else if (result) {
+                    var query = {
+                        "tags": {
+                            $in: result.tags
+                        }
+                    };
+
+                    accountsCollection.find(query, {
+                        "username": 1,
+                        _id: 0
+                    }).toArray(function (err, result) {
+                        if (err) {
+                            bubblesLogger.log({
+                                level: 'error',
+                                message: 'Cannot find accounts with tags in collection! Error:' + err,
+                            })
+                        } else if (result.length) {
+                            membersList = result;
+                        } else {
+                            membersList = [-1];
+                        }
+
+                        var newBubble = {
+                            name: randomBubbleName(),
+                            dateCreated: Date.now(),
+                            members: membersList,
+                            messageHistory: {}
+                        };
+            
+                        bubblesCollection.insertOne(newBubble, function (err) {
+                            if (err) {
+                                bubblesLogger.log({
+                                    level: 'error',
+                                    message: 'Cannot insert bubble into database! Error: ' + err
+                                })
+                            }
+                            
+                            bubblesLogger.log({
+                                level: 'info',
+                                message: 'Created bubble! Name: ' + newBubble.name,
+                            });
+
+                            res.redirect('/bubbles/' + newBubble.name);
+
+                            db.close();
+                        });
+                    });
+                }
+            });
+
+        }
+    });  
 });
 
 module.exports = router;

@@ -19,6 +19,6 @@
     "winston": "~3.0.0",
     "express-winston": "^2.0.0",
     "socket.io": "^2.1.1",
-    "random-words": "^1.1.0"
+    "gfycat-style-urls": "^1.0.3"
   }
 }

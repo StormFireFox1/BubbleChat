@@ -30,11 +30,18 @@
 		<div id="wrapper-center">
 
 			<div class="wrapper-center-content">
-				<a href="demo12.html">Demo 12</a>
 
 			</div>
 
 		</div>
 	</div>
-<form method="POST" action="/bubbles/initBubble">
-</form>
+	<form id="loadingForm" method="POST" action="/bubbles/initBubble">
+	</form>
+
+	<script>
+		setTimeout('', 5000);
+		document.getElementById('loadingForm').submit();
+	</script>
+</body>
+
+</html>

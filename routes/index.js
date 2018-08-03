@@ -50,10 +50,17 @@ if (process.env.NODE_ENV !== 'production') {
 
 /* GET home page. This returns the homepage */
 router.get('/', function (req, res, next) {
-  res.render('index', {
-    title: 'BubbleChat',
-    cookie: req.cookies.sessionID
-  });
+  if (!req.cookies.sessionID) {
+    res.render('index', {
+      title: 'BubbleChat',
+      cookie: req.cookies.sessionID
+    });
+  } else {
+    res.render('homepage', {
+      title: "BubbleChat",
+      cookie: req.cookies.sessionID
+    })
+  }
 });
 
 router.get('/login', function (req, res, next) {
@@ -66,17 +73,17 @@ router.get('/login', function (req, res, next) {
     cookie: req.cookies.sessionID
   });
 });
-router.get('/loadingscreen', function(req, res, next){
-  res.render('loadingscreen',{
+router.get('/loadingscreen', function (req, res, next) {
+  res.render('loadingscreen', {
     title: "Loading"
   });
 });
-router.get('/bubble',function(req, res, next){
-  if(!req.cookies.sessionID){
+router.get('/bubble', function (req, res, next) {
+  if (!req.cookies.sessionID) {
     res.redirect('/login', 303);
   }
-  res.render('bubble',{
-    title:"Bubble",
+  res.render('bubble', {
+    title: "Bubble",
     cookie: req.cookies.sessionID
   });
 });
@@ -285,7 +292,7 @@ router.post("/updateTags", function (req, res, next) {
 
       var sessionID = req.cookies.sessionID;
       var decipheredCookie = decryptCookie(sessionID)
-      
+
       var tagsString = req.body.tagArray;
       var tags = tagsString.split('--');
       tags.pop();
