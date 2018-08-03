@@ -13,6 +13,8 @@
     width: auto;
     padding: 7px 14px;
 }
+.navbar{
+  background-image: linear-gradient(to right, #f4eba0 0%, #f4eba0 100%);}
 
 #loading{
 	background-color: #448ed3;

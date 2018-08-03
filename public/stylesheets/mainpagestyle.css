@@ -8,7 +8,8 @@ body {
   height: 100%;
   background: linear-gradient(10deg, #f4eba0 43%, #c0faca 43%);
 }
-
+.navbar{
+  background-image: linear-gradient(to right, #f4eba0 0%, #f4eba0 100%);}
 
 .navbar-brand {
   transform: translateX(-50%);
@@ -104,7 +105,7 @@ a.button5 {
   text-align: center;
   transition: all 0.15s;
   font-size: 18px;  
-
+  margin-top:23%;
   position: relative;
 
 }
@@ -184,5 +185,160 @@ a.button5:hover {
   a.button5 {
     display: block;
     margin: 0.4em auto;
+  }
+ 
+}
+@media only screen and (max-width: 1280px) {
+  .box {
+    width: 55%;
+    height: 210px;
+  
+  
+    background-color: white;
+    margin: auto;
+    border-radius: 5px;
+  }
+  .box h3 {
+    font-family: 'Didact Gothic', sans-serif;
+    font-weight: normal;
+    text-align: center;
+    padding: 15px;
+    color: #000;
+  }
+  
+  .box3 {
+    background-color: #9EEBA1;
+  }
+  .shadow3 h3 {
+    width: 87%;
+    height: 210px;
+    margin-left: 6%;
+    border: 2px dashed #F7EEEE;
+    border-radius: 5px;
+  
+  }
+}
+
+
+@media only screen and (max-width: 1030px) {
+  .box {
+    width: 65%;
+    height: 230px;
+  
+  
+    background-color: white;
+    margin: auto;
+    border-radius: 5px;
+  }
+  .box h3 {
+    font-family: 'Didact Gothic', sans-serif;
+    font-weight: normal;
+    text-align: center;
+    padding: 15px;
+    color: #000;
+  }
+  
+  .box3 {
+    background-color: #9EEBA1;
+  }
+  .shadow3 h3 {
+    width: 87%;
+    height: 230px;
+    margin-left: 6%;
+    border: 2px dashed #F7EEEE;
+    border-radius: 5px;
+  
+  }
+}
+
+@media only screen and (max-width: 830px) {
+  .box {
+    width: 89%;
+    height: 230px;
+  
+  
+    background-color: white;
+    margin: auto;
+    border-radius: 5px;
+  }
+  .box h3 {
+    font-family: 'Didact Gothic', sans-serif;
+    font-weight: normal;
+    text-align: center;
+    padding: 15px;
+    color: #000;
+  }
+  
+  .box3 {
+    background-color: #9EEBA1;
+  }
+  .shadow3 h3 {
+    width: 87%;
+    height: 230px;
+    margin-left: 6%;
+    border: 2px dashed #F7EEEE;
+    border-radius: 5px;
+  
+  }
+}
+@media only screen and (max-width: 630px) {
+  .box {
+    width: 95%;
+    height: 250px;
+  
+  
+    background-color: white;
+    margin-top:20%;
+    border-radius: 5px;
+  }
+  .box h3 {
+    font-family: 'Didact Gothic', sans-serif;
+    font-weight: normal;
+    text-align: center;
+    padding: 15px;
+    color: #000;
+  }
+  .box h3{
+    font-size: 21px;
+  }
+  .box3 {
+    background-color: #9EEBA1;
+  }
+  .shadow3 h3 {
+    width: 95%;
+    height: 250px;
+    margin-left: 6%;
+    border: 2px dashed #F7EEEE;
+    border-radius: 5px;
+  
+  }
+ 
+
+
+  a.button5 {
+    display: inline-block;
+    padding: 0.46em 1.6em;
+    border: 0.1em solid #000000;
+    margin: 0 0.2em 0.2em 0;
+    border-radius: 0.22em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #000000;
+    text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+    background-color: #FFFFFF;
+    text-align: center;
+    transition: all 0.15s;
+    font-size: 18px;  
+    margin-top:45%;
+    position: relative;
+  
+  }
+  
+  a.button5:hover {
+    text-shadow: 0 0 2em rgba(255, 255, 255, 1);
+    color: #FFFFFF;
+    border-color: #FFFFFF;
   }
 }

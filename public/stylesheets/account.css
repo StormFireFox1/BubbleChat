@@ -3,7 +3,9 @@
     left: 51%;
     position: absolute;
 }
-
+.navbar{
+    background-image: linear-gradient(to right, #f4eba0 0%, #f4eba0 100%);}
+  
 .navbar-brand {
     padding: 0px;
 }

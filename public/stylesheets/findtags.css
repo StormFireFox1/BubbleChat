@@ -16,6 +16,8 @@ body {
     margin: auto;
     margin-top: 20%;
 }
+.navbar{
+  background-image: linear-gradient(to right, #f4eba0 0%, #f4eba0 100%);}
 
 .navbar-brand {
     transform: translateX(-50%);

@@ -72,7 +72,7 @@ body {
 }
 
 .wrap input[type="password"] {
-    border-radius: 0px 0px 0px 0px;
+    border-radius: 0px 0px 7px 7px;
 }
 .wrap input[type="email"]
 {
@@ -120,3 +120,5 @@ body {
     width: auto;
     padding: 7px 14px;
 }
+.navbar{
+  background-image: linear-gradient(to right, #f4eba0 0%, #f4eba0 100%);}
