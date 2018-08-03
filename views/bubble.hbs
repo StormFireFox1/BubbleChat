@@ -18,14 +18,14 @@
                 <input type="text" id="username" class="form-control" placeholder="Enter name...">
                 <br>
                 <div class="card">
-                    <div id="messages" class="card-block">
+                    <div id="messages" class="card-block" style="overflow-y: scroll">
                         {{#each bubble.messageHistory}}
                             <div class="chat-message">{{this.handle}}: {{this.message}}</div>
                         {{/each}}
                     </div>
                 </div>
                 <br>
-                <textarea id="textarea" class="form-control" placeholder="Enter message..."></textarea>
+                    <textarea rows="10" cols="10" id="textarea" class="form-control" placeholder="Enter message..."></textarea>
             </div>
         </div>
     </div>
@@ -77,13 +77,14 @@
                 if (data) {
                     console.log('Received chat data! Data: ' + data);
                     var messageBody = document.querySelector('#messages');
-                    messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
                     // Build out message div
                     var message = document.createElement('div');
                     message.setAttribute('class', 'chat-message');
                     message.textContent = data.handle + ": " + data.message;
                     messages.insertBefore(message, messages.firstChild);
                     messages.appendChild(message);
+                    messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+                    $('textarea').filter('[id*=textarea]').val('');
 
                 }
             });
