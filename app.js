@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var hbs = require('hbs');
 var cookieParser = require('cookie-parser');
+var config = require('./config/config')
+var client = require('mongodb').MongoClient;
 var logger = require('morgan');
 var fs = require('fs');
 
@@ -63,6 +65,29 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('sendmessage', function (data) {
+    client.connect(config.mongodb.uri, function (err, db) {
+      if (err) {
+        throw err;
+      }
+
+      var bubblesCollection = db.db('BubbleChat').collection('Bubbles');
+      bubblesCollection.updateOne({
+        "name": data.room
+      }, {
+        $push: {
+          messageHistory: {
+            handle: data.handle,
+            message: data.message
+          }
+        }
+      }, function (err, result) {
+        if (err) {
+          throw err;
+        } else {
+          db.close();
+        }
+      });
+    });
     socket.emit('updatechat', data);
     socket.in(data.room).emit('updatechat', data);
   });

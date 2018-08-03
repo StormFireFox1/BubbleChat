@@ -100,7 +100,7 @@ router.get('/:bubbleName', function (req, res, next) {
                             message: 'Cannot read bubble from database! Error: ' + err,
                         });
                     } else if (result) {
-                        var bubbleName = result.name;
+                        var bubble = result;
                         var accountsCollection = db.db('BubbleChat').collection('Accounts');
                         accountsCollection.findOne({
                             "username": decipheredCookie
@@ -117,7 +117,7 @@ router.get('/:bubbleName', function (req, res, next) {
                                 res.render('bubble', {
                                     title: req.params.bubbleName + " - BubbleChat",
                                     cookie: req.cookies.sessionID,
-                                    bubbleName: req.params.bubbleName,
+                                    bubble: bubble,
                                     handle: result.handle
                                 })
                             }});
@@ -200,7 +200,7 @@ router.post('/initBubble', function (req, res, next) {
                             name: randomBubbleName(),
                             dateCreated: Date.now(),
                             members: membersList,
-                            messageHistory: {}
+                            messageHistory: []
                         };
             
                         bubblesCollection.insertOne(newBubble, function (err) {

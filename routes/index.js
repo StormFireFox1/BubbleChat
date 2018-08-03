@@ -179,6 +179,7 @@ router.post('/authNew', function (req, res, next) {
         dateofbirth: req.body.dateofbirth,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
+        handle: require('gfycat-style-urls').generateCombination(2, "", true),
         tags: []
       };
 
@@ -331,6 +332,8 @@ router.post("/updateTags", function (req, res, next) {
     }
   })
 });
+
+
 
 router.get('/authLogOut', function (req, res, next) {
   res.clearCookie('sessionID');
